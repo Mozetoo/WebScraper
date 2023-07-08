@@ -18,7 +18,8 @@ soup = BeautifulSoup(data, "html.parser")
 #date of result
 date = soup.find(class_="LeaderBoardWithButtons_lbwbDate__gsMEu").text
 # Find all tables with the specific class
-check = soup.find('div', class_='LeaderBoardCard_lbcWrapper__e4bCZ LeaderBoardWithButtons_lbwbCardGrid__Iqg6m LeaderBoardCard_leaderBoardCategory__vWRuZ')
+check = soup.find_all('div', class_='LeaderBoardCard_lbcWrapper__e4bCZ LeaderBoardWithButtons_lbwbCardGrid__Iqg6m LeaderBoardCard_leaderBoardCategory__vWRuZ')[2]
+rank_name = check.find('h2', class_= "LeaderBoardCard_lbcTitle___WI9J").text
 rank = check.find_all('td', class_="LeaderBoardPlayerCard_lbpcTableCell__SnM1o")
 name = check.find_all('a', class_="Anchor_anchor__cSc3P LeaderBoardPlayerCard_lbpcTableLink__MDNgL")
 # Iterate through the tables and select the desired one based on the text within it
@@ -40,13 +41,14 @@ for check in name:
 print(Rank)
 print(Name)
 print(Points)
+print(rank_name)
 
 data = list(zip(Rank, [date] * len(Rank), Name, Points))
 
 filename = 'data.csv'
 with open(filename, 'w', newline='') as file:
     writer = csv.writer(file)
-    writer.writerow(['Rank', 'Date', 'Name', 'Point'])  # Write the header row
+    writer.writerow(['Rank', 'Date', 'Name', str(rank_name)])  # Write the header row
     writer.writerows(data)  # Write the data rows
 
 print(f"Data written to {filename} successfully.")
